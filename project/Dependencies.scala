@@ -1,7 +1,6 @@
 import sbt._
 
 object Version {
-  val scala = "2.11.4"
   val typesafeConfig = "1.2.1"
   val janalyse = "0.9.14"
 }

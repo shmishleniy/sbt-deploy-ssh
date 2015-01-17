@@ -11,8 +11,11 @@ Allows you to setup deploy configuration for your project.
 
 ### Installation
 
--todo add plugin-
-
+Add to your project/plugins.sbt file:
+``` sbt
+addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1")
+```
+Enable plugin in your project.
 For example in your `build.sbt`
 ``` sbt
 lazy val myProject = project.enablePlugins(DeploySSH)

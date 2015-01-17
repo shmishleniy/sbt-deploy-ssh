@@ -1,8 +1,8 @@
 import bintray.Keys._
 
-name := "sbt-deploy-ssh"
-
 sbtPlugin := true
+
+name := "sbt-deploy-ssh"
 
 organization := "com.github.shmishleniy"
 
@@ -19,6 +19,10 @@ scalacOptions ++= Seq(
 publishMavenStyle := false
 
 bintrayPublishSettings
+
+repository in bintray := "sbt-plugins"
+
+licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html"))
 
 bintrayOrganization in bintray := None
 

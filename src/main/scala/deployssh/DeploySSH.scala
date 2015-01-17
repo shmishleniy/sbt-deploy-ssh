@@ -38,6 +38,8 @@ object DeploySSH extends AutoPlugin {
 
   case class ArtifactSSH(path: File, remoteDir: String)
 
+  class SkipDeployException(e: Exception) extends Exception(e)
+
   import autoImport._
   import scala.collection.JavaConversions._
   override lazy val projectSettings = defaultSetting ++ Seq(
@@ -106,13 +108,16 @@ object DeploySSH extends AutoPlugin {
         configs get serverName match {
           case Some(serverConfig) =>
             log.info(s"Found config=${serverConfig.host}. Start deployment process.")
-            Try(deployToTheServer(serverConfig,
-              deployArtifacts.value,
-              deploySshExecBefore.value,
-              deploySshExecAfter.value, log)).recover {
-              case error: Exception => log.error(s"Failed to deploy to the server=$serverName, error=$error")
+            try {
+              deployToTheServer(serverConfig,
+                deployArtifacts.value,
+                deploySshExecBefore.value,
+                deploySshExecAfter.value, log)
+              log.info(s"Deploy done for server=$serverName.")
+            } catch {
+              case error: SkipDeployException =>
+                log.error(s"Failed to deploy to the server=$serverName, error=${error.getMessage}. Skip deployment.\r\nStack=${error.getStackTraceString}")
             }
-            log.info(s"Deploy done for server=$serverName.")
           case None =>
             log.error(s"Failed to find config for server name=$serverName. Skip deployment process.")
         }

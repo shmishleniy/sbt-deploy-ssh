@@ -9,6 +9,8 @@ Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
 
 **autoplugin (sbt >= 0.13.5)**
 
+## Current version: 0.1.1
+
 [Please read sbt documentation before start to work with plugin](http://www.scala-sbt.org/0.13.5/docs/Getting-Started/Using-Plugins.html)
 
  - [Installation](#installation)
@@ -23,7 +25,7 @@ Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
 Add to your project/plugins.sbt file:
 
 ``` sbt
-addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1")
+addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.1")
 ```
 Enable plugin in your project.
 For example in your `build.sbt`

@@ -185,12 +185,10 @@ object DeploySSH extends AutoPlugin {
 
   private[this] def getDestinationFile(pathToFolderWithFile: File, localFile: File,
                                        remoteDir: File): Option[String] = {
-    localFile.relativeTo(pathToFolderWithFile) match {
-      case Some(relativePath) => Some(new File(remoteDir, relativePath.getPath)
-        .getPath.replaceAll(java.util.regex.Matcher.quoteReplacement("\\"), "/"))
-      case _ =>
-        Some(remoteDir.getPath)
-    }
+    Some((localFile.relativeTo(pathToFolderWithFile) match {
+      case Some(relativePath) => new File(remoteDir, relativePath.getPath).getPath
+      case _ => remoteDir.getPath
+    }).replaceAll(java.util.regex.Matcher.quoteReplacement("\\"), "/"))
   }
 
   private[this] def getWorkDirectory(path: File): File = {

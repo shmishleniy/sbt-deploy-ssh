@@ -3,7 +3,7 @@ SBT deploy plugin
 
 Allows you to setup deploy configuration for your project.
 
-You will be able to deploy with your project with `deploy-ssh` task
+You will be able to deploy your project with `deploy-ssh` task
 
 Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
 
@@ -19,6 +19,7 @@ Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
   - [Locations](#locations)
   - [Artifacts](#artifacts)
  - [Execute scripts before/after deploy](#execute-scripts-beforeafter-deploy) 
+ - [Link to task](#link-to-task)
 
 ## Installation
 
@@ -138,7 +139,9 @@ Deploy execution for this config:
 ### Execute scripts before/after deploy
 
 Use `deploySshExecBefore` and `deploySshExecAfter` to execute any bash commands before and after deploy.
+
 Any exeption in `deploySshExecBefore` and `deploySshExecAfter` will abort deploy for all servers.
+
 To skip deploy only for curent server you should wrap exeption to `SkipDeployException`.
 
 ``` sbt
@@ -168,5 +171,22 @@ lazy val myProject = project.enablePlugins(DeploySSH).settings(
    }
   }
  )
+)
+```
+
+### Link to task
+
+If you need execute deploy in your task you can use `deploySshTask` and `deploySshServersNames` to config args for `deploySsh`. Or cast `deploy-ssh` to task. 
+
+Examples:
+
+``` sbt
+lazy val myProject = project.enablePlugins(DeploySSH).settings(
+ deployConfigs ++= Seq(
+  ServerConfig("server_5", "169.254.0.2"),
+  ServerConfig("server_6", "169.254.0.3")
+ ),
+ deploySshServersNames ++= Seq("server_5", "server_6"),
+ publishLocal := deploySshTask //or deploySsh.toTask(" server_5 server_6")
 )
 ```

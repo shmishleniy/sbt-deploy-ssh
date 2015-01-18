@@ -16,7 +16,7 @@ Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
   - [Configs](#configs)
   - [Locations](#locations)
   - [Artifacts](#artifacts)
- - [Execute scripts before/after deploy](#execute scripts before/after deploy) 
+ - [Execute scripts before/after deploy](#execute-scripts-beforeafter-deploy) 
 
 ## Installation
 

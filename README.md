@@ -176,9 +176,7 @@ lazy val myProject = project.enablePlugins(DeploySSH).settings(
 
 ### Link to task
 
-If you need execute deploy in your task you can use `deploySshTask` and `deploySshServersNames` to config args for `deploySsh`. Or cast `deploy-ssh` to task. 
-
-Examples:
+If you need execute deploy in your task you can use `deploySshTask` and `deploySshServersNames` to config args for `deploySsh`. Or cast `deploySsh` to task. 
 
 ``` sbt
 lazy val myProject = project.enablePlugins(DeploySSH).settings(

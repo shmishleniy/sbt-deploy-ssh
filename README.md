@@ -28,6 +28,13 @@ Add to your project/plugins.sbt file:
 ``` sbt
 addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.1")
 ```
+
+Add ssh library repository in SBT
+
+```sbt
+resolvers += "JAnalyse Repository" at "http://www.janalyse.fr/repository/"
+```
+
 Enable plugin in your project.
 For example in your `build.sbt`
 

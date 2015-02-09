@@ -23,13 +23,13 @@ Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
 
 ## Installation
 
-Add to your project/plugins.sbt file:
+Add to your `project/plugins.sbt` file:
 
 ``` sbt
 addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.1")
 ```
 
-Add ssh library repository in SBT
+Add resolver to `project/plugins.sbt`:
 
 ```sbt
 resolvers += "JAnalyse Repository" at "http://www.janalyse.fr/repository/"

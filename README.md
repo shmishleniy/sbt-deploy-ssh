@@ -59,6 +59,7 @@ Allowed config fields:
 * `passphrase`- passphrase for ssh key. Remove or leave empty for ssh key without passphrase
 * `port` - ssh port. If missing or empty will be used `22`
 * `sshDir` - directory with you ssh keys. This directory should contain `id_rsa` or `id_dsa`. By default `user.name/.ssh` directory. This field is not allowed to be empty in `.conf` file. You should remove this from config in `.conf` file to use default value.
+* `sshKeyFile` - private key that will be used for ssh connection. By default will be used `id_rsa` or `id_dsa`. This field is not allowed to be empty in `.conf` file. You should remove this from config in `.conf` file to use default value.
 
 **`name` and `host` fields are mandatory**
 
@@ -71,7 +72,8 @@ case class ServerConfig(name: String,
                         password: Option[String] = None,
                         passphrase: Option[String] = None,
                         port: Option[Int] = None,
-                        sshDir: Option[String] = None)
+                        sshDir: Option[String] = None,
+                        sshKeyFile: Option[String] = None)
 ````
 
 Example of the `.conf`
@@ -82,12 +84,13 @@ servers = [
   name = "server_0"
   host = "127.0.0.1"
  },
- #connect to the server via `22` port and ssh key that located in `/tmp/.sshKeys/` directory, user is `ssh_test`
+ #connect to the server via `22` port and ssh key with name `id_a12` that located in `/tmp/.sshKeys/` directory, user is `ssh_test`
  {
   name = "server_1"
   host = "169.254.0.2"
   user = "ssh_test"
   sshDir = "/tmp/.sshKeys"
+  sshKeyFile = "id_a12
  }
 ]
 ```
@@ -104,8 +107,8 @@ There are four places where you can store your server config (All configs will b
 lazy val myProject = project.enablePlugins(DeploySSH).settings(
  //load build.conf from external path
  deployExternalConfigFile ++= Seq("/home/myUser/Documents/build.conf"),
- //load build2.conf from `myProjectDir` and load build3.conf from `myProjectDir/projects`
- deployResourceConfigFile ++= Seq("build2.conf", "projects/build3.conf"),
+ //load build2.conf from `myProjectDir` and load build3.conf from `myProjectDir/project`
+ deployResourceConfigFile ++= Seq("build2.conf", "project/build3.conf"),
  //load build4.conf from user home directory (in example `/home/myUser/build4.conf`)
  deployHomeConfigFile ++= Seq("build4.conf"),
  //configuration in project setttings

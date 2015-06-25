@@ -9,7 +9,7 @@ Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
 
 **autoplugin (sbt >= 0.13.5)**
 
-## Current version: 0.1.1
+## Current version: 0.1.2
 
 [Please read sbt documentation before start to work with plugin](http://www.scala-sbt.org/0.13.5/docs/Getting-Started/Using-Plugins.html)
 
@@ -26,7 +26,7 @@ Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
 Add to your `project/plugins.sbt` file:
 
 ``` sbt
-addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.1")
+addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.2")
 ```
 
 Add resolver to `project/plugins.sbt`:
@@ -58,8 +58,8 @@ Allowed config fields:
 * `password`- ssh password. If missing or empty will be used ssh key
 * `passphrase`- passphrase for ssh key. Remove or leave empty for ssh key without passphrase
 * `port` - ssh port. If missing or empty will be used `22`
-* `sshDir` - directory with you ssh keys. This directory should contain `id_rsa` or `id_dsa`. By default `user.name/.ssh` directory. This field is not allowed to be empty in `.conf` file. You should remove this from config in `.conf` file to use default value.
-* `sshKeyFile` - private key that will be used for ssh connection. By default will be used `id_rsa` or `id_dsa`. This field is not allowed to be empty in `.conf` file. You should remove this from config in `.conf` file to use default value.
+* `sshDir` - directory with you ssh keys. This directory should contain `id_rsa` or `id_dsa`. By default `user.name/.ssh` directory. This field is not allowed to be empty in `.conf` file. You should remove this field from config in `.conf` file to use default value.
+* `sshKeyFile` - private key that will be used for ssh connection. By default will be used `id_rsa` or `id_dsa`. This field is not allowed to be empty in `.conf` file. You should remove this field from config in `.conf` file to use default value.
 
 **`name` and `host` fields are mandatory**
 

@@ -34,7 +34,8 @@ object DeploySSH extends AutoPlugin {
                           password: Option[String] = None,
                           passphrase: Option[String] = None,
                           port: Option[Int] = None,
-                          sshDir: Option[String] = None)
+                          sshDir: Option[String] = None,
+                          sshKeyFile: Option[String] = None)
 
   case class ArtifactSSH(path: File, remoteDir: String)
 
@@ -81,7 +82,8 @@ object DeploySSH extends AutoPlugin {
               passphrase = Try(Some(serverConfig.getString("passphrase"))) getOrElse None
               port = Try(Some(serverConfig.getInt("port"))) getOrElse None
               sshDir = Try(Some(serverConfig.getString("sshDir"))) getOrElse None
-            } yield ServerConfig(name, host, user, password, passphrase, port, sshDir)
+              sshKeyFile = Try(Some(serverConfig.getString("sshKeyFile"))) getOrElse None
+            } yield ServerConfig(name, host, user, password, passphrase, port, sshDir, sshKeyFile)
             lst ::: serverConfigs
           }
         }
@@ -150,7 +152,9 @@ object DeploySSH extends AutoPlugin {
         serverConfig.passphrase,
         port = serverConfig.port.getOrElse(22),
         sshUserDir = serverConfig.sshDir.getOrElse(
-          Properties.userHome + java.io.File.separator + ".ssh")))
+          Properties.userHome + java.io.File.separator + ".ssh"),
+        sshKeyFile = serverConfig.sshKeyFile)
+    )
     val sftp = ssh.newSftp
     log.info("Exec before deploy")
     execBefore.foreach(_(ssh))

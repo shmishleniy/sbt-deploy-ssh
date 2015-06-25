@@ -6,7 +6,7 @@ name := "sbt-deploy-ssh"
 
 organization := "com.github.shmishleniy"
 
-version := "0.1.1"
+version := "0.1.2"
 
 scalacOptions ++= Seq(
   "-feature",

@@ -154,6 +154,10 @@ Deploy execution for this config:
 
 `deploy-ssh server_5`
 
+or 
+
+`deploySsh server_5`
+
 ### Execute scripts before/after deploy
 
 Use `deploySshExecBefore` and `deploySshExecAfter` to execute any bash commands before and after deploy.

@@ -5,7 +5,14 @@ Allows you to setup deploy configuration for your project.
 
 You will be able to deploy your project with `deploy-ssh` task
 
-Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
+Usage example:
+
+`deploy-ssh yourServerName1 yourServerName2 ...`
+
+or
+
+`deploySsh yourServerName1 yourServerName2 ...`
+
 
 **autoplugin (sbt >= 0.13.5)**
 
@@ -20,6 +27,7 @@ Usage example `deploy-ssh yourServerName1 yourServerName2 ...`
   - [Artifacts](#artifacts)
  - [Execute scripts before/after deploy](#execute-scripts-beforeafter-deploy) 
  - [Link to task](#link-to-task)
+ - [Start deploy](#start-deploy)
 
 ## Installation
 
@@ -198,3 +206,21 @@ lazy val myProject = project.enablePlugins(DeploySSH).settings(
  publishLocal := deploySshTask //or deploySsh.toTask(" server_5 server_6")
 )
 ```
+
+## Start deploy
+
+After confuguration you will be able to:
+
+### Start deploy procedure from sbt console with `deploySsh` input task:
+
+`deploy-ssh yourServerName1 yourServerName2 ...`
+
+or
+
+`deploySsh yourServerName1 yourServerName2 ...`
+
+### Start deploy procedure from sbt console with `deploySshTask` task:
+
+You should set `deploySshServersNames` list of server names that will be deployed and execute `deploySshTask` from console or link it to other task.
+
+[See example: "Link to task"](#link-to-task)

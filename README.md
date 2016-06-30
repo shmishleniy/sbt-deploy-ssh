@@ -114,11 +114,11 @@ There are four places where you can store your server config (All configs will b
 ``` sbt 
 lazy val myProject = project.enablePlugins(DeploySSH).settings(
  //load build.conf from external path
- deployExternalConfigFile ++= Seq("/home/myUser/Documents/build.conf"),
+ deployExternalConfigFiles ++= Seq("/home/myUser/Documents/build.conf"),
  //load build2.conf from `myProjectDir` and load build3.conf from `myProjectDir/project`
- deployResourceConfigFile ++= Seq("build2.conf", "project/build3.conf"),
+ deployResourceConfigFiles ++= Seq("build2.conf", "project/build3.conf"),
  //load build4.conf from user home directory (in example `/home/myUser/build4.conf`)
- deployHomeConfigFile ++= Seq("build4.conf"),
+ deployHomeConfigFiles ++= Seq("build4.conf"),
  //configuration in project setttings
  deployConfigs ++= mySettings,
  deployConfigs ++= Seq(

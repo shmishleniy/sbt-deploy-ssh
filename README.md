@@ -106,7 +106,7 @@ servers = [
 ### Locations
 There are four places where you can store your server config (All configs will be loaded and merged).
 
-* Extrenal config file that located somewhere on your PC
+* External config file that located somewhere on your PC
 * Config file located in your project directory
 * Config file located in user home directory
 * Set server configs directly in project settings

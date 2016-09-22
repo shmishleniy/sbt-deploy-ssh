@@ -13,10 +13,7 @@ or
 
 `deploySsh yourServerName1 yourServerName2 ...`
 
-
 **autoplugin (sbt >= 0.13.5)**
-
-## Current version: 0.1.2
 
 [Please read sbt documentation before start to work with plugin](http://www.scala-sbt.org/0.13.5/docs/Getting-Started/Using-Plugins.html)
 
@@ -25,7 +22,7 @@ or
   - [Configs](#configs)
   - [Locations](#locations)
   - [Artifacts](#artifacts)
- - [Execute scripts before/after deploy](#execute-scripts-beforeafter-deploy) 
+ - [Execute scripts before/after deploy](#execute-scripts-beforeafter-deploy)
  - [Link to task](#link-to-task)
  - [Start deploy](#start-deploy)
 
@@ -34,7 +31,7 @@ or
 Add to your `project/plugins.sbt` file:
 
 ``` sbt
-addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.2")
+addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "[0,)")
 ```
 
 Add resolver to `project/plugins.sbt`:
@@ -111,7 +108,7 @@ There are four places where you can store your server config (All configs will b
 * Config file located in user home directory
 * Set server configs directly in project settings
 
-``` sbt 
+``` sbt
 lazy val myProject = project.enablePlugins(DeploySSH).settings(
  //load build.conf from external path
  deployExternalConfigFiles ++= Seq("/home/myUser/Documents/build.conf"),
@@ -135,7 +132,7 @@ val mySettings = Seq(
 ### Artifacts
 Set artifacts to deploy
 
-``` sbt 
+``` sbt
 lazy val myProject = project.enablePlugins(DeploySSH).settings(
  version := "1.1",
  deployConfigs ++= Seq(
@@ -154,7 +151,7 @@ Deploy execution for this config:
 
 `deploy-ssh server_5`
 
-or 
+or
 
 `deploySsh server_5`
 
@@ -198,7 +195,7 @@ lazy val myProject = project.enablePlugins(DeploySSH).settings(
 
 ### Link to task
 
-If you need execute deploy in your task you can use `deploySshTask` and `deploySshServersNames` to config args for `deploySsh`. Or cast `deploySsh` to task. 
+If you need execute deploy in your task you can use `deploySshTask` and `deploySshServersNames` to config args for `deploySsh`. Or cast `deploySsh` to task.
 
 ``` sbt
 lazy val myProject = project.enablePlugins(DeploySSH).settings(

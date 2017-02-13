@@ -40,6 +40,12 @@ Add resolver to `project/plugins.sbt`:
 resolvers += "JAnalyse Repository" at "http://www.janalyse.fr/repository/"
 ```
 
+Add import to your project build file
+
+```sbt
+import deployssh.DeploySSH._
+```
+
 Enable plugin in your project.
 For example in your `build.sbt`
 
@@ -57,14 +63,19 @@ You can use `.conf` files or set configs directly in project settings.
 
 Allowed config fields:
 
-* `name` - your server name. **Should be unique** in all loaded configs. (Duplication will be overriden)
+* `name` - your server name. **Should be unique** in all loaded configs. (Duplication will be overridden)
 * `host` - ip adress or hostname of the server
 * `user` - ssh username. If missing or empty will be used your current user (`user.name`)
 * `password`- ssh password. If missing or empty will be used ssh key
 * `passphrase`- passphrase for ssh key. Remove or leave empty for ssh key without passphrase
 * `port` - ssh port. If missing or empty will be used `22`
-* `sshDir` - directory with you ssh keys. This directory should contain `id_rsa` or `id_dsa`. By default `user.name/.ssh` directory. This field is not allowed to be empty in `.conf` file. You should remove this field from config in `.conf` file to use default value.
-* `sshKeyFile` - private key that will be used for ssh connection. By default will be used `id_rsa` or `id_dsa`. This field is not allowed to be empty in `.conf` file. You should remove this field from config in `.conf` file to use default value.
+* `sshDir` - directory with you ssh keys.
+This directory should contain `identity`, `id_dsa`, `id_ecdsa`, `id_ed25519` or `id_rsa` (the first matched file in the folder will be used for auth).
+By default `user.name/.ssh` directory. This field is not allowed to be empty in `.conf` file.
+You should remove this field from config in `.conf` file to use default value.
+* `sshKeyFile` - add additional private key file name that will be used for ssh connection.
+This file name will be added to head of the default list [`identity`, `id_dsa`, `id_ecdsa`, `id_ed25519`, `id_rsa`].
+This field is not allowed to be empty in `.conf` file. You should remove this field from config in `.conf` file to use default value.
 
 **`name` and `host` fields are mandatory**
 
@@ -95,7 +106,7 @@ servers = [
   host = "169.254.0.2"
   user = "ssh_test"
   sshDir = "/tmp/.sshKeys"
-  sshKeyFile = "id_a12
+  sshKeyFile = "id_a12" #custom private key file name
  }
 ]
 ```
@@ -124,7 +135,7 @@ lazy val myProject = project.enablePlugins(DeploySSH).settings(
  )
 )
 
-val mySettings = Seq(
+lazy val mySettings = Seq(
  ServerConfig("server_5", "169.254.0.2")
 )
 ```
@@ -159,9 +170,11 @@ or
 
 Use `deploySshExecBefore` and `deploySshExecAfter` to execute any bash commands before and after deploy.
 
-Any exeption in `deploySshExecBefore` and `deploySshExecAfter` will abort deploy for all servers.
+Any exception in `deploySshExecBefore` and `deploySshExecAfter` will abort deploy for all servers.
 
-To skip deploy only for curent server you should wrap exeption to `SkipDeployException`.
+To skip deploy only for current server you should wrap exception to `SkipDeployException`.
+
+For example stop and update and run your app, copy with scp needed application.conf depends on server name:
 
 ``` sbt
 lazy val myProject = project.enablePlugins(DeploySSH).settings(
@@ -181,6 +194,9 @@ lazy val myProject = project.enablePlugins(DeploySSH).settings(
  ),
  deploySshExecAfter ++= Seq(
   (ssh: SSH) => {
+   ssh.scp { scp =>
+     scp.send(file(s"./src/main/resources/application-${ssh.options.name.get}.conf"), s"/home/app/application.conf")))
+   }
    ssh.execOnce("nohup ./myApp/run & echo $! > ~/pid")
    ssh.execOnce("touch pid")
    val pid = ssh.execOnceAndTrim("cat pid")

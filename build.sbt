@@ -4,7 +4,7 @@ sbtPlugin := true
 
 name := "sbt-deploy-ssh"
 organization := "com.github.shmishleniy"
-version := org.eclipse.jgit.api.Git.open(file(".")).describe().call()
+version := "0.1.3"
 
 publishMavenStyle := false
 bintrayPublishSettings
@@ -15,7 +15,8 @@ bintrayOrganization in bintray := None
 resolvers += "JAnalyse Repository" at "http://www.janalyse.fr/repository/"
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.2.1",
-  "fr.janalyse" %% "janalyse-ssh" % "0.9.19"
+  "fr.janalyse" %% "janalyse-ssh" % "0.9.19",
+  "org.scalaz" %% "scalaz-core" % "7.2.8"
 )
 
 scalacOptions in Compile ++= Seq("-encoding","UTF-8","-target:jvm-1.7","-deprecation","-feature")

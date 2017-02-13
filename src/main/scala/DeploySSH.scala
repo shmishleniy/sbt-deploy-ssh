@@ -145,15 +145,16 @@ object DeploySSH extends AutoPlugin {
                                       execBefore: Seq[(SSH) => Any],
                                       execAfter: Seq[(SSH) => Any],
                                       log: Logger): Unit = {
+    import java.io.File.{separator=>`/`}
+    val sshKey = serverConfig.sshDir.getOrElse(Properties.userHome+`/`+".ssh")+`/`+serverConfig.sshKeyFile
+
     implicit val ssh = SSH(
       SSHOptions(serverConfig.host,
         serverConfig.user getOrElse Properties.userName,
         serverConfig.password,
         serverConfig.passphrase,
         port = serverConfig.port.getOrElse(22),
-        sshUserDir = serverConfig.sshDir.getOrElse(
-          Properties.userHome + java.io.File.separator + ".ssh"),
-        sshKeyFile = serverConfig.sshKeyFile)
+        identities = SSHIdentity(sshKey)::Nil)
     )
     val sftp = ssh.newSftp
     log.info("Exec before deploy")

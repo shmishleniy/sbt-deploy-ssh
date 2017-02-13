@@ -1,3 +1,2 @@
-.idea
-.sbt
-target
+target/
+.DS_Store

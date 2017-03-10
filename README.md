@@ -31,7 +31,7 @@ or
 Add to your `project/plugins.sbt` file:
 
 ``` sbt
-addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "[0,)")
+addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.3")
 ```
 
 Add resolver to `project/plugins.sbt`:

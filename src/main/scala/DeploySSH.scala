@@ -49,7 +49,7 @@ object DeploySSH extends AutoPlugin {
       def loadFromFile(path: String): Config = {
         Try {
           ConfigFactory.parseFile(file(path),
-            ConfigParseOptions.defaults.setAllowMissing(false))
+            ConfigParseOptions.defaults.setAllowMissing(false)).resolve()
         } match {
           case Success(config) => config
           case Failure(e) =>

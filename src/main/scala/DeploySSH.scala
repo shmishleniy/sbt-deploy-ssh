@@ -1,6 +1,7 @@
 package deployssh
 
 import com.typesafe.config.{ConfigFactory, Config, ConfigParseOptions}
+import scala.collection.JavaConverters._
 import fr.janalyse.ssh._
 import sbt._
 
@@ -42,7 +43,6 @@ object DeploySSH extends AutoPlugin {
   class SkipDeployException(e: Exception) extends Exception(e)
 
   import autoImport._
-  import scala.collection.JavaConversions._
   override lazy val projectSettings = defaultSetting ++ Seq(
     deployConfigsLoaded := {
       val log = sbt.Keys.streams.value.log
@@ -73,7 +73,7 @@ object DeploySSH extends AutoPlugin {
         deployConfigsLoaded.value.foldLeft(List[ServerConfig]()) {
           (lst, config) => {
             val serverConfigs = for {
-              server <- Try(config.getObjectList("servers").toList) getOrElse List()
+              server <- Try(config.getObjectList("servers").asScala.toList) getOrElse List()
               serverConfig = server.toConfig
               name = serverConfig.getString("name")
               host = serverConfig.getString("host")
@@ -118,7 +118,7 @@ object DeploySSH extends AutoPlugin {
               log.info(s"Deploy done for server=$serverName.")
             } catch {
               case error: SkipDeployException =>
-                log.error(s"Failed to deploy to the server=$serverName, error=${error.getMessage}. Skip deployment.\r\nStack=${error.getStackTraceString}")
+                log.error(s"Failed to deploy to the server=$serverName, error=${error.getMessage}. Skip deployment.\r\nStack=${error.getStackTrace.mkString("", "\r\n", "")}")
             }
           case None =>
             log.error(s"Failed to find config for server name=$serverName. Skip deployment process.")

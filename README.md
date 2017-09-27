@@ -7,15 +7,11 @@ You will be able to deploy your project with `deploy-ssh` task
 
 Usage example:
 
-`deploy-ssh yourServerName1 yourServerName2 ...`
-
-or
-
 `deploySsh yourServerName1 yourServerName2 ...`
 
 **autoplugin (sbt >= 0.13.5)**
 
-[Please read sbt documentation before start to work with plugin](http://www.scala-sbt.org/0.13.5/docs/Getting-Started/Using-Plugins.html)
+[Please read sbt documentation before start to work with plugin](http://www.scala-sbt.org/1.x/docs/Using-Plugins.html)
 
  - [Installation](#installation)
  - [Configuration](#configuration)
@@ -31,7 +27,7 @@ or
 Add to your `project/plugins.sbt` file:
 
 ``` sbt
-addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.3")
+addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.4")
 ```
 
 Add resolver to `project/plugins.sbt`:
@@ -229,10 +225,6 @@ lazy val myProject = project.enablePlugins(DeploySSH).settings(
 After confuguration you will be able to:
 
 ### Start deploy procedure from sbt console with `deploySsh` input task:
-
-`deploy-ssh yourServerName1 yourServerName2 ...`
-
-or
 
 `deploySsh yourServerName1 yourServerName2 ...`
 

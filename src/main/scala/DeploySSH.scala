@@ -23,8 +23,8 @@ object DeploySSH extends AutoPlugin {
     val deploySshServersNames = TaskKey[Seq[String]]("deploy-ssh-servers-names", "Deploy to the specified servers when call `deploy-ssh-task`")
     val deploySshTask = TaskKey[Unit]("deploy-ssh-task", "Wrap `deploySsh`. Will be executed with `deploy-ssh-servers-names` args")
 
-    val deploySshExecBefore = TaskKey[Seq[(SSH) => Any]]("deploy-ssh-exec-before", "Execute before deploy")
-    val deploySshExecAfter = TaskKey[Seq[(SSH) => Any]]("deploy-ssh-exec-after", "Execute after deploy")
+    val deploySshExecBefore = TaskKey[Seq[(SSH) => Either[String, String]]]("deploy-ssh-exec-before", "Execute before deploy")
+    val deploySshExecAfter = TaskKey[Seq[(SSH) => Either[String, String]]]("deploy-ssh-exec-after", "Execute after deploy")
   }
 
   val autoImport = Keys
@@ -39,8 +39,6 @@ object DeploySSH extends AutoPlugin {
                           sshKeyFile: Option[String] = None)
 
   case class ArtifactSSH(path: File, remoteDir: String)
-
-  class SkipDeployException(e: Exception) extends Exception(e)
 
   import autoImport._
   override lazy val projectSettings = defaultSetting ++ Seq(
@@ -94,57 +92,51 @@ object DeploySSH extends AutoPlugin {
     },
     deploySsh := {
       val log = sbt.Keys.streams.value.log
-      val servers = {
-        val args = sbt.Def.spaceDelimited().parsed
-        if (args.size > 0 && "!!".equals(args.head))
-          deploySshServersNames.value
-        else args
+      val servers: Seq[String] = sbt.Def.spaceDelimited().parsed match {
+        case "!!" :: _ => deploySshServersNames.value
+        case args => args
       }
-      val configs = deployServers.value
+      val configs: Map[String, ServerConfig] = deployServers.value
       if (configs.size > 0) log.info(s"Loaded ${configs.size} configs.")
       else log.warn(s"Loaded 0 configs. Please verify configuration.")
       log.debug(configs.mkString(", \r\n"))
       log.info(s"Deploy started. Servers=${servers.mkString(", ")}.")
-      servers foreach { serverName =>
+      servers.toStream.map{ serverName =>
         log.info(s"Trying to deploy to server with name=$serverName.")
-        configs get serverName match {
-          case Some(serverConfig) =>
-            log.info(s"Found config=${serverConfig.host}. Start deployment process.")
-            try {
-              deployToTheServer(serverConfig,
-                deployArtifacts.value,
-                deploySshExecBefore.value,
-                deploySshExecAfter.value, log)
-              log.info(s"Deploy done for server=$serverName.")
-            } catch {
-              case error: SkipDeployException =>
-                log.error(s"Failed to deploy to the server=$serverName, error=${error.getMessage}. Skip deployment.\r\nStack=${error.getStackTrace.mkString("", "\r\n", "")}")
-            }
-          case None =>
-            log.error(s"Failed to find config for server name=$serverName. Skip deployment process.")
-        }
-      }
+        configs.
+          get(serverName).
+          fold[Either[String, String]](Right(s"Failed to find config for server=$serverName. Skip deployment process.")){ serverConfig =>
+            log.info(s"Found server=$serverName config=${serverConfig.host}. Start deployment process.")
+            deployToTheServer(serverConfig,
+              deployArtifacts.value,
+              deploySshExecBefore.value,
+              deploySshExecAfter.value, log)
+          }.fold{
+            err => { log.error(s"Deployment stop.\r\nDeploy err.\r\n$err"); err };
+            ok => { log.info(s"Deploy ok.\r\n$ok"); ok }
+          }
+      }.takeWhile(_.isRight).toList
       log.info(s"Deploy done.")
     },
     deploySshTask := deploySsh.toTask(" !!").value
   )
 
   val defaultSetting = Seq(
-    deployExternalConfigFiles := Seq(),
-    deployResourceConfigFiles := Seq(),
-    deployHomeConfigFiles := Seq(),
-    deploySshExecBefore := Seq(),
-    deploySshExecAfter := Seq(),
-    deployConfigs := Seq(),
-    deployArtifacts := Seq(),
-    deploySshServersNames := Seq()
+    deployExternalConfigFiles := Seq.empty,
+    deployResourceConfigFiles := Seq.empty,
+    deployHomeConfigFiles := Seq.empty,
+    deploySshExecBefore := Seq.empty,
+    deploySshExecAfter := Seq.empty,
+    deployConfigs := Seq.empty,
+    deployArtifacts := Seq.empty,
+    deploySshServersNames := Seq.empty
   )
 
   private[this] def deployToTheServer(serverConfig: ServerConfig,
                                       artifacts: Seq[ArtifactSSH],
-                                      execBefore: Seq[(SSH) => Any],
-                                      execAfter: Seq[(SSH) => Any],
-                                      log: Logger): Unit = {
+                                      execBefore: Seq[(SSH) => Either[String, String]],
+                                      execAfter: Seq[(SSH) => Either[String, String]],
+                                      log: Logger): Either[String, String] = {
     import java.io.File.separator
     import java.nio.file.Paths
 

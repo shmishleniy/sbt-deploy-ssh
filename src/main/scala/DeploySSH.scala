@@ -29,14 +29,16 @@ object DeploySSH extends AutoPlugin {
 
   val autoImport = Keys
 
-  case class ServerConfig(name: String,
-                          host: String,
-                          user: Option[String] = None,
-                          password: Option[String] = None,
-                          passphrase: Option[String] = None,
-                          port: Option[Int] = None,
-                          sshDir: Option[String] = None,
-                          sshKeyFile: Option[String] = None)
+  case class ServerConfig
+  ( name: String
+  , host: String
+  , user: Option[String] = None
+  , password: Option[String] = None
+  , passphrase: Option[String] = None
+  , port: Option[Int] = None
+  , sshDir: Option[String] = None
+  , sshKeyFile: Option[String] = None
+  )
 
   case class ArtifactSSH(path: File, remoteDir: String)
 
@@ -140,11 +142,7 @@ object DeploySSH extends AutoPlugin {
     deploySshServersNames := Seq()
   )
 
-  private[this] def deployToTheServer(serverConfig: ServerConfig,
-                                      artifacts: Seq[ArtifactSSH],
-                                      execBefore: Seq[(SSH) => Any],
-                                      execAfter: Seq[(SSH) => Any],
-                                      log: Logger): Unit = {
+  private[this] def deployToTheServer( serverConfig: ServerConfig, artifacts: Seq[ArtifactSSH], execBefore: Seq[(SSH) => Any], execAfter: Seq[(SSH) => Any], log: Logger): Unit = {
     import java.io.File.separator
     import java.nio.file.Paths
 
@@ -184,9 +182,7 @@ object DeploySSH extends AutoPlugin {
     ssh.close()
   }
 
-  private[this] def deployFile(ssh: SSH, transferProtocol: TransfertOperations,
-                               fileToDeploy: File, workDirectory: File,
-                               remoteDir: File, log: Logger): Unit = {
+  private[this] def deployFile(ssh: SSH, transferProtocol: TransfertOperations, fileToDeploy: File, workDirectory: File, remoteDir: File, log: Logger): Unit = {
     val destDirectory =
       getDestinationFile(workDirectory, fileToDeploy.getParentFile, remoteDir)
     val destFile = getDestinationFile(workDirectory, fileToDeploy, remoteDir)
@@ -195,8 +191,7 @@ object DeploySSH extends AutoPlugin {
     destFile.foreach(transferProtocol.send(fileToDeploy, _))
   }
 
-  private[this] def getDestinationFile(pathToFolderWithFile: File, localFile: File,
-                                       remoteDir: File): Option[String] = {
+  private[this] def getDestinationFile(pathToFolderWithFile: File, localFile: File, remoteDir: File): Option[String] = {
     Some((localFile.relativeTo(pathToFolderWithFile) match {
       case Some(relativePath) => new File(remoteDir, relativePath.getPath).getPath
       case _ => remoteDir.getPath

@@ -1,4 +1,5 @@
 # sbt-deploy-ssh
+
 SBT deploy plugin
 
 Allows you to setup deploy configuration for your project.
@@ -8,8 +9,6 @@ You will be able to deploy your project with `deploy-ssh` task
 Usage example:
 
 `deploySsh yourServerName1 yourServerName2 ...`
-
-**autoplugin (sbt >= 0.13.5)**
 
 [Please read sbt documentation before start to work with plugin](http://www.scala-sbt.org/1.x/docs/Using-Plugins.html)
 
@@ -78,15 +77,17 @@ This field is not allowed to be empty in `.conf` file. You should remove this fi
 To set server configs in project settings use `ServerConfig` class and `deployConfigs` task key (see details below in `Locations` section)
 
 ``` scala
-case class ServerConfig(name: String,
-                        host: String,
-                        user: Option[String] = None,
-                        password: Option[String] = None,
-                        passphrase: Option[String] = None,
-                        port: Option[Int] = None,
-                        sshDir: Option[String] = None,
-                        sshKeyFile: Option[String] = None)
-````
+case class ServerConfig
+  ( name: String
+  , host: String
+  , user: Option[String] = None
+  , password: Option[String] = None
+  , passphrase: Option[String] = None
+  , port: Option[Int] = None
+  , sshDir: Option[String] = None
+  , sshKeyFile: Option[String] = None
+  )
+```
 
 Example of the `.conf`
 ``` conf

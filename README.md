@@ -1,16 +1,18 @@
 # sbt-deploy-ssh
 
-SBT deploy plugin
+SBT Deploy Plugin to easily deploy your project.
 
-Allows you to setup deploy configuration for your project.
+## Quick Start
 
-You will be able to deploy your project with `deploy-ssh` task
+Read documentation here below or check [example project](https://github.com/shmishleniy/sbt-deploy-ssh/tree/master/example).
 
-Usage example:
+You will be able to deploy your project with `deploy-ssh` task.
 
-`deploySsh yourServerName1 yourServerName2 ...`
+Usage example: `deploySsh yourServerName1 yourServerName2 ...`
 
-[Please read sbt documentation before start to work with plugin](http://www.scala-sbt.org/1.x/docs/Using-Plugins.html)
+[SBT's documentation on how to use plugins](http://www.scala-sbt.org/1.x/docs/Using-Plugins.html)
+
+## Table of Contents
 
  - [Installation](#installation)
  - [Configuration](#configuration)

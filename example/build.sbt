@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.13.5"
 ThisBuild / fork := true
 ThisBuild / cancelable in Global := true
 ThisBuild / scalacOptions in Compile ++= Vector(

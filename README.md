@@ -2,6 +2,21 @@
 
 SBT Deploy Plugin to easily deploy your project.
 
+## Notes. Bintray shutdown 01.05.2021
+Please apply changes to `project/plugins.sbt`:
+### janalyse resolver
+remove:
+
+`resolvers += "JAnalyse Repository" at "http://www.janalyse.fr/repository/"`
+
+### new organization `io.github.shmishleniy`
+replace:
+
+`addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.x")`
+
+with
+
+`addSbtPlugin("io.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.x")`
 ## Quick Start
 
 Read documentation here below or check [example project](https://github.com/shmishleniy/sbt-deploy-ssh/tree/master/example).
@@ -28,13 +43,7 @@ Usage example: `deploySsh yourServerName1 yourServerName2 ...`
 Add to your `project/plugins.sbt` file:
 
 ``` sbt
-addSbtPlugin("com.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.4")
-```
-
-Add resolver to `project/plugins.sbt`:
-
-```sbt
-resolvers += "JAnalyse Repository" at "http://www.janalyse.fr/repository/"
+addSbtPlugin("io.github.shmishleniy" % "sbt-deploy-ssh" % "0.1.5")
 ```
 
 Add import to your project build file
